@@ -3,13 +3,22 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' ; style-src 'self'" />
-        <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; 
+          script-src 'self'; 
+          font-src 'self' https://fonts.gstatic.com;
+          style-src 'self' https://fonts.googleapis.com"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="./style.css" />
         <title>List of installed programs</title>
         <script type="module" src="../src/renderer.js" defer></script>
     </head>
     <body>
-        <h1>List of installed programs and components:</h1>
+        <h2>List of installed programs and components:</h2>
         <ul id="software-list"></ul>
     </body>
 </html>

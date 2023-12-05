@@ -1,0 +1,33 @@
+body {
+    font-family: "Lato", sans-serif;
+    margin: 1.25rem;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    user-select: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    user-select: none;
+    font-size: 0.875rem;
+}
+
+li {
+    margin-bottom: 0.625rem;
+    padding: 0.625rem;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+li:hover {
+    background-color: #e0e0e0;
+}
+
+li:active {
+    background-color: #bfbfbf;
+}

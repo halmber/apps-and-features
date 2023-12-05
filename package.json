@@ -1,0 +1,18 @@
+{
+    "name": "apps-and-features",
+    "version": "1.0.0",
+    "description": "A program to list (and run) installed Windows runtime components and programs",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "npx electronmon ."
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^27.0.2"
+    },
+    "dependencies": {
+        "electronmon": "^2.0.2"
+    }
+}

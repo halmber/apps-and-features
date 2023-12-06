@@ -50,6 +50,8 @@ const getInstalledSoftware = async () => {
             currentSoftware.DisplayIcon = displayIconMatch[1].trim();
         }
     }
+
+    //checking if the last recorded register contained the required data and its recording
     if (currentSoftware.DisplayName && currentSoftware.DisplayIcon) {
         softwareList.push({
             name: currentSoftware.DisplayName,

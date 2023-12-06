@@ -16,6 +16,34 @@ const executeQuery = async (strQuery) => {
     }
 };
 
+const processRegister = (softwareList, registerLines) => {
+    const app = {};
+
+    for (const line of registerLines) {
+        const displayNameMatch = line.match(/DisplayName\s+REG_SZ\s+(.*)/);
+        const displayIconMatch = line.match(/DisplayIcon\s+REG_SZ\s+(.*)/);
+        const displayVersionMatch = line.match(/DisplayVersion\s+REG_SZ\s+(.*)/);
+
+        if (displayNameMatch) {
+            app.displayName = displayNameMatch[1].trim();
+        }
+        if (displayIconMatch) {
+            app.displayIcon = displayIconMatch[1].trim();
+        }
+        if (displayVersionMatch) {
+            app.displayVersion = displayVersionMatch[1].trim();
+        }
+    }
+
+    if (app.displayName && app.displayIcon) {
+        softwareList.push({
+            name: app.displayName,
+            installLocation: app.displayIcon.replace(/,.*$/, ""),
+            version: app.displayVersion,
+        });
+    }
+};
+
 const getInstalledSoftware = async () => {
     const [registersLinesPart1, registersLinesPart2] = await Promise.all([
         executeQuery(REGISTER_1),
@@ -24,45 +52,18 @@ const getInstalledSoftware = async () => {
     const allRegistersLines = [...registersLinesPart1, ...registersLinesPart2];
 
     const softwareList = [];
-    let currentSoftware = {};
+    let currentRegisterLines = [];
 
     for (const line of allRegistersLines) {
-        const displayNameMatch = line.match(/DisplayName\s+REG_SZ\s+(.*)/);
-        const displayIconMatch = line.match(/DisplayIcon\s+REG_SZ\s+(.*)/);
-        const displayVersionMatch = line.match(/DisplayVersion\s+REG_SZ\s+(.*)/);
-
         // If a new register is started, we add the current already recorded application to the list
         if (line.startsWith("HKEY_LOCAL_MACHINE")) {
-            if (currentSoftware.DisplayName && currentSoftware.DisplayIcon) {
-                softwareList.push({
-                    name: currentSoftware.DisplayName,
-                    installLocation: currentSoftware.DisplayIcon.replace(/,.*$/, ""),
-                    version: currentSoftware.DisplayVersion,
-                });
-
-                currentSoftware = {};
-            }
+            processRegister(softwareList, currentRegisterLines);
+            currentRegisterLines = [];
         }
-
-        if (displayNameMatch) {
-            currentSoftware.DisplayName = displayNameMatch[1].trim();
-        }
-        if (displayIconMatch) {
-            currentSoftware.DisplayIcon = displayIconMatch[1].trim();
-        }
-        if (displayVersionMatch) {
-            currentSoftware.DisplayVersion = displayVersionMatch[1].trim();
-        }
+        currentRegisterLines.push(line);
     }
-
-    //checking if the last recorded register contained the required data and its recording
-    if (currentSoftware.DisplayName && currentSoftware.DisplayIcon) {
-        softwareList.push({
-            name: currentSoftware.DisplayName,
-            installLocation: currentSoftware.DisplayIcon.replace(/,.*$/, ""),
-            version: currentSoftware.DisplayVersion,
-        });
-    }
+    // Checking if the last recorded register contained the required data and its recording
+    processRegister(softwareList, currentRegisterLines);
 
     return softwareList.sort((a, b) => a.name.localeCompare(b.name));
 };

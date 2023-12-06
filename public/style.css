@@ -1,18 +1,21 @@
 body {
     font-family: "Lato", sans-serif;
     margin: 1.25rem;
+    user-select: none;
 }
 
 h2 {
     text-align: center;
     color: #333;
-    user-select: none;
+}
+
+h4 {
+    margin: 5px 0;
 }
 
 ul {
     list-style: none;
     padding: 0;
-    user-select: none;
     font-size: 0.875rem;
 }
 
@@ -22,6 +25,8 @@ li {
     background-color: #f0f0f0;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
 }
 
 li:hover {
@@ -58,4 +63,9 @@ li:active {
     height: 50px;
     animation: spin 1.2s linear infinite;
     margin: 20px auto;
+}
+
+.header {
+    display: none;
+    justify-content: space-between;
 }

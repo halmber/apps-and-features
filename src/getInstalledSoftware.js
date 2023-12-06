@@ -29,6 +29,7 @@ const getInstalledSoftware = async () => {
     for (const line of allRegistersLines) {
         const displayNameMatch = line.match(/DisplayName\s+REG_SZ\s+(.*)/);
         const displayIconMatch = line.match(/DisplayIcon\s+REG_SZ\s+(.*)/);
+        const displayVersionMatch = line.match(/DisplayVersion\s+REG_SZ\s+(.*)/);
 
         // If a new register is started, we add the current already recorded application to the list
         if (line.startsWith("HKEY_LOCAL_MACHINE")) {
@@ -36,6 +37,7 @@ const getInstalledSoftware = async () => {
                 softwareList.push({
                     name: currentSoftware.DisplayName,
                     installLocation: currentSoftware.DisplayIcon.replace(/,.*$/, ""),
+                    version: currentSoftware.DisplayVersion,
                 });
 
                 currentSoftware = {};
@@ -45,9 +47,11 @@ const getInstalledSoftware = async () => {
         if (displayNameMatch) {
             currentSoftware.DisplayName = displayNameMatch[1].trim();
         }
-
         if (displayIconMatch) {
             currentSoftware.DisplayIcon = displayIconMatch[1].trim();
+        }
+        if (displayVersionMatch) {
+            currentSoftware.DisplayVersion = displayVersionMatch[1].trim();
         }
     }
 
@@ -56,6 +60,7 @@ const getInstalledSoftware = async () => {
         softwareList.push({
             name: currentSoftware.DisplayName,
             installLocation: currentSoftware.DisplayIcon.replace(/,.*$/, ""),
+            version: currentSoftware.DisplayVersion,
         });
     }
 

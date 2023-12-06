@@ -4,13 +4,20 @@ const softwareListElement = document.getElementById("software-list");
 const loader = document.getElementById("loader");
 const header = document.getElementById("header");
 
-loader.classList.add("loading");
+async function fetchData() {
+    try {
+        loader.classList.add("loading");
+        const softwareList = await api.getInstalledSoftware();
+        loader.classList.remove("loading");
 
-const softwareList = await api.getInstalledSoftware();
+        return softwareList;
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+        return [];
+    }
+}
 
-loader.classList.remove("loading");
-
-const createAppInfoElements = (name, version) => {
+function createAppInfoElements(name, version) {
     const nameElement = document.createElement("span");
     nameElement.textContent = name;
 
@@ -18,15 +25,10 @@ const createAppInfoElements = (name, version) => {
     versionElement.textContent = version;
 
     return [nameElement, versionElement];
-};
-
-if (softwareList.length > 0) {
-    header.style.display = "flex";
 }
 
-softwareList.forEach((app) => {
+function displayAppDetails(app) {
     const listItem = document.createElement("li");
-
     const [appNameElement, appVersionElement] = createAppInfoElements(app.name, app.version);
 
     listItem.appendChild(appNameElement);
@@ -37,4 +39,16 @@ softwareList.forEach((app) => {
     });
 
     softwareListElement.appendChild(listItem);
-});
+}
+
+async function main() {
+    const softwareList = await fetchData();
+
+    if (softwareList.length > 0) {
+        header.style.display = "flex";
+    }
+
+    softwareList.forEach(displayAppDetails);
+}
+
+main();

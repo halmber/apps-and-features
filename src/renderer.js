@@ -4,7 +4,7 @@ const softwareListElement = document.getElementById("software-list");
 const loader = document.getElementById("loader");
 const header = document.getElementById("header");
 
-async function fetchData() {
+const fetchData = async () => {
     try {
         loader.classList.add("loading");
         const softwareList = await api.getInstalledSoftware();
@@ -15,9 +15,9 @@ async function fetchData() {
         console.error("Error fetching data: ", error);
         return [];
     }
-}
+};
 
-function createAppInfoElements(name, version) {
+const createAppInfoElements = (name, version) => {
     const nameElement = document.createElement("span");
     nameElement.textContent = name;
 
@@ -25,9 +25,9 @@ function createAppInfoElements(name, version) {
     versionElement.textContent = version;
 
     return [nameElement, versionElement];
-}
+};
 
-function displayAppDetails(app) {
+const displayAppDetails = (app) => {
     const listItem = document.createElement("li");
     const [appNameElement, appVersionElement] = createAppInfoElements(app.name, app.version);
 
@@ -39,9 +39,9 @@ function displayAppDetails(app) {
     });
 
     softwareListElement.appendChild(listItem);
-}
+};
 
-async function main() {
+const main = async () => {
     const softwareList = await fetchData();
 
     if (softwareList.length > 0) {
@@ -49,6 +49,6 @@ async function main() {
     }
 
     softwareList.forEach(displayAppDetails);
-}
+};
 
 main();
